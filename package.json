@@ -1,0 +1,13 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type":"module",
+  "scripts": {
+    "dev ": ""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
