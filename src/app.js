@@ -14,6 +14,15 @@ app.use(cors())
 app.use(cookieParser())
 
 
+// routes imports
+import userRouter from "./routes/user.routes.js"
+
+
+// routes
+
+app.use("/api/v1/users",userRouter)
+
+
 
 
 
