@@ -1,13 +1,9 @@
-import vine, {errors} from "@vinejs/vine";
-import {RegisterValidation} from "../Validations/user.validation.js";
+
 import {User} from "../models/user.models.js";
-import bcrypt from "bcryptjs";
 import {asyncHandler} from "../utils/AsyncHandler.js";
 
 const generateAccessAndRefresh = async (user) => {
   try {
-    // const user = await User.findById({user});
-
     const accessToken = user.generateAccesstoken();
     const refreshToken = user.generateRefreshtoken();
     user.refreshToken = refreshToken;
@@ -21,22 +17,17 @@ const generateAccessAndRefresh = async (user) => {
   }
 };
 
-
-
 const RegisterUser = asyncHandler(async (req, res) => {
   const data = req.body;
-  const validator = vine.compile(RegisterValidation);
-  const payload = await validator.validate(data);
   const existUser = await User.findOne({
-    $or: [{email: payload.email}, {username: payload.username}],
+    $or: [{email: data.email}, {username: data.username}],
   });
   if (existUser) {
     return res.status(408).json({
       message: "user Already exist",
     });
   }
-
-  const create = await User.create(payload);
+  const create = await User.create(data);
   const newData = await User.findById({_id: create._id}).select(
     "-password -refreshToken"
   );
@@ -57,8 +48,9 @@ const LoginUser = asyncHandler(async (req,res) => {
     return res.status(400).json({message: "user not exist"});
   }
 
-  const comoarePassword = bcrypt.compareSync(password, user.password);
-  if (!comoarePassword) {
+  const CheckPassword = await user.isPasswordCorrect(password)
+
+  if (!CheckPassword) {
     return res.status(401).json({
       message: "Wrong password",
     });
