@@ -2,6 +2,11 @@
 import {User} from "../models/user.models.js";
 import {asyncHandler} from "../utils/AsyncHandler.js";
 
+const options = {
+  httpOnly: true,
+  secure: true,
+};
+
 const generateAccessAndRefresh = async (user) => {
   try {
     const accessToken = user.generateAccesstoken();
@@ -31,10 +36,17 @@ const RegisterUser = asyncHandler(async (req, res) => {
   const newData = await User.findById({_id: create._id}).select(
     "-password -refreshToken"
   );
-  return res.status(200).json({
-    message: "User Created Successful",
-    data: newData,
-  });
+  const {accessToken, refreshToken} = await generateAccessAndRefresh(newData);
+
+  return res
+    .status(200)
+    .cookie("AccessToken", accessToken, options)
+    .cookie("RefreshToken", refreshToken, options)
+    .json({
+      message: "user Login successful",
+      data:newData,
+      accessToken
+    });
 });
 
 const LoginUser = asyncHandler(async (req,res) => {
@@ -58,10 +70,8 @@ const LoginUser = asyncHandler(async (req,res) => {
 
   const {accessToken, refreshToken} = await generateAccessAndRefresh(user);
 
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
+  const userdata = await User.findById(user._id).select("-password -refreshToken")
+ 
 
   return res
     .status(200)
@@ -69,8 +79,22 @@ const LoginUser = asyncHandler(async (req,res) => {
     .cookie("RefreshToken", refreshToken, options)
     .json({
       message: "user Login successful",
+      data:userdata,
       accessToken,
     });
 })
 
-export {LoginUser, RegisterUser};
+const LogoutUser = asyncHandler(async(req,res)=>{
+  const {_id} = req.user
+  await User.findByIdAndUpdate(_id,{$set:{refreshToken:null}})
+
+  return res
+    .status(200)
+    .clearCookie("AccessToken",  options)
+    .clearCookie("RefreshToken", options)
+    .json({
+      message: "user Logout successful",
+    });
+})
+
+export {LoginUser, RegisterUser,LogoutUser};

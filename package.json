@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon -r dotenv/config src/index.js",
     "start": "node src/index.js",
-    "gen":"node swagger.js"
+    "gen": "node swagger.js"
   },
   "keywords": [],
   "author": "",
@@ -24,12 +24,12 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "googleapis": "^137.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.3.3",
     "mongoose-aggregate-paginate-v2": "^1.0.7",
     "multer": "^1.4.5-lts.1",
     "swagger-autogen": "^2.23.7",
-    "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"
   }
 }

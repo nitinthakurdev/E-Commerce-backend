@@ -14,6 +14,10 @@ const categorySchema = new Schema({
     public_id:{
         type:String,
         require:true
+    },
+    user_id:{
+        type:Schema.Types.ObjectId,
+        ref:"User"
     }
 },{timestamps:true})
 

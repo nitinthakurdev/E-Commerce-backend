@@ -1,4 +1,3 @@
-import { messages } from "@vinejs/vine/defaults";
 import {CategoryModal} from "../models/category.models.js";
 import {asyncHandler} from "../utils/AsyncHandler.js";
 import {DeleteOnCloudinary, UploadOnCloudinary} from "../utils/cloudnary.js";
@@ -36,6 +35,7 @@ const CreateCategory = asyncHandler(async (req, res) => {
     category_name,
     category_image: response.secure_url,
     public_id: response.public_id,
+    user_id:req.user._id
   });
   return res.status(200).json({
     message: "Category Created Successful",

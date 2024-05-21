@@ -117,4 +117,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# personal file 
+drive-uplodes.json
+
 # End of https://mrkandreev.name/snippets/gitignore-generator/#Node
