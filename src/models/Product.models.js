@@ -38,13 +38,15 @@ const productModal = new Schema({
         trim: true,
     },
     product_category:{
-        // type:Schema.Types.ObjectId,
-        // ref:"Category"
+        type:Schema.Types.ObjectId,
+        ref:"Category"
+    },
+    product_material:{
         type:String,
         required:true,
         trim: true,
     },
-    product_material:{
+    product_skuId:{
         type:String,
         required:true,
         trim: true,
@@ -81,6 +83,11 @@ const productModal = new Schema({
     },
     product_image:{
         type:[ImageSchema],
+        required:true
+    },
+    user_id:{
+        type:Schema.Types.ObjectId,
+        ref:"User",
         required:true
     }
 },{timestamps:true})

@@ -61,7 +61,6 @@ const deleteImage = async (fileId) => {
     try {
       const driveService = google.drive({ version: "v3", auth });
       await driveService.files.delete({ fileId });
-      console.log(`Deleted file with ID: ${fileId}`);
     } catch (error) {
       console.error('Error deleting file:', error);
       throw error;
