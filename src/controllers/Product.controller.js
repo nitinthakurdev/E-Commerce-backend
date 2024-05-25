@@ -1,11 +1,13 @@
 import { ProductModal } from "../models/Product.models.js";
 import { asyncHandler } from "../utils/AsyncHandler.js";
-import { deleteImage, uploadImage } from "../utils/drive-image-uploader.js";
+import { deleteImage, uploadImage } from "../utils/Image_uploader.js";
 
 const CreateProduct = asyncHandler(async (req, res) => {
     const data = req.body;
     const files = req.files;
     const {_id} = req.user
+
+    
 
     if (!files || files.length === 0) {
         return res.status(400).json({
@@ -20,7 +22,7 @@ const CreateProduct = asyncHandler(async (req, res) => {
             const imageData = await uploadImage(file);
             const newImage = {
                 ImageUrl: imageData.url,
-                Image: imageData.id
+                Image: imageData.path
             };
             uploadedImages.push(newImage);
         } catch (error) {
@@ -32,6 +34,9 @@ const CreateProduct = asyncHandler(async (req, res) => {
     }
     
 
+
+    
+
     const create = await ProductModal.create({...data,product_image:uploadedImages,user_id:_id})
 
     return res.status(200).json({
@@ -41,7 +46,7 @@ const CreateProduct = asyncHandler(async (req, res) => {
 });
 
 const GetProduct = asyncHandler(async (req,res)=>{
-    const data = await ProductModal.find({})
+    const data = await ProductModal.find({}).populate('product_category')
     return res.status(200).json({
         message:"Product data",
         data

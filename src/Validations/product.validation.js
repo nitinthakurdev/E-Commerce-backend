@@ -21,4 +21,6 @@ export const ProductSchema = vine.object({
     product_dimantion:vine.string(),
     product_color:vine.array(vine.string()),
     product_inStock:vine.number(),
+    product_brand:vine.string(),
+    
 })
