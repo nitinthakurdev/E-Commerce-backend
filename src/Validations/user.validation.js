@@ -13,3 +13,10 @@ export const RegisterValidation = vine.object({
     password:vine.string().minLength(6).maxLength(16),
     type:vine.string()
 })
+
+
+export const ReviewValidation = vine.object({
+    title:vine.string().minLength(4),
+    descrition:vine.string().minLength(40),
+    rating:vine.number()
+})

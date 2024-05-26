@@ -97,4 +97,18 @@ const LogoutUser = asyncHandler(async(req,res)=>{
     });
 })
 
-export {LoginUser, RegisterUser,LogoutUser};
+const getLoginUser = asyncHandler(async(req,res)=>{
+  return res.status(200).json({message:"Login user",data:req.user})
+})
+
+const UpdateUser = asyncHandler(async(req,res)=>{
+  const {fullName,phone,gender} = req.body
+
+  const update = await User.findByIdAndUpdate(req.user?._id,{fullName,phone,gender},{new:true}).select("-password -refreshToken")
+  return res.status(200).json({
+    message:"user Updated Successful",
+    data:update
+  })
+})
+
+export {LoginUser, RegisterUser,LogoutUser,getLoginUser,UpdateUser};
