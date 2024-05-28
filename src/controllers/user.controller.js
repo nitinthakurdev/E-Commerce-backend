@@ -1,6 +1,8 @@
 
 import {User} from "../models/user.models.js";
 import {asyncHandler} from "../utils/AsyncHandler.js";
+import { DeleteOnCloudinary, UploadOnCloudinary } from "../utils/cloudnary.js";
+import fs from "fs"
 
 const options = {
   httpOnly: true,
@@ -111,4 +113,30 @@ const UpdateUser = asyncHandler(async(req,res)=>{
   })
 })
 
-export {LoginUser, RegisterUser,LogoutUser,getLoginUser,UpdateUser};
+const UpadteAvatar = asyncHandler(async(req,res)=>{
+  const file = req.file?.path
+  if(!file){
+    return res.status(400).json({
+      message:"File is empty"
+    })
+  }
+
+  const oldFile = req?.user?.avatar?.public_id
+  if(oldFile){
+    await DeleteOnCloudinary(oldFile)
+  }
+
+  const response  = await UploadOnCloudinary(file)
+  fs.unlinkSync(file);
+  const avatar = {
+    imageUrl:response.secure_url,
+    public_id:response.public_id
+  }
+  const update = await User.findByIdAndUpdate(req.user?._id,{avatar:avatar},{new:true}).select( "-password -refreshToken")
+  return res.status(200).json({
+    message:"Profile Updated",
+    data:update
+  })
+})
+
+export {LoginUser, RegisterUser,LogoutUser,getLoginUser,UpdateUser,UpadteAvatar};

@@ -12,4 +12,5 @@ router.route("/getall").get(GetProduct)
 router.route("/delete/:id").delete(authenticate,DeleteProduct)
 
 
+
 export default router
