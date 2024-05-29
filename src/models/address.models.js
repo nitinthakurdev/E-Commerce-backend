@@ -1,0 +1,59 @@
+import mongoose,{Schema} from "mongoose";
+
+const addressSchema = new Schema({
+fullname:{
+    type:String,
+    required:true,
+    trim:true
+},
+phoneNo1:{
+    type:Number,
+    required:true,
+    trim:true
+},
+phoneNo2:{
+    type:Number,
+    trim:true
+},
+pincode:{
+    type:String,
+    required:true,
+    trim:true
+},
+country:{
+    type:String,
+    required:true,
+    trim:true
+},
+state:{
+    type:String,
+    required:true,
+    trim:true
+},
+city:{
+    type:String,
+    required:true,
+    trim:true
+},
+houseNo:{
+    type:String,
+    required:true,
+    trim:true
+},
+area:{
+    type:String,
+    required:true,
+    trim:true
+},
+type:{
+    type:String,
+    required:true,
+    trim:true
+},
+user_id:{
+    type:Schema.Types.ObjectId,
+    ref:"User"
+}
+},{timestamps:true})
+
+export const AddressModel = mongoose.model("Address",addressSchema)

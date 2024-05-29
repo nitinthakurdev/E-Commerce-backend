@@ -10,7 +10,7 @@ const AddToCart = asyncHandler(async (req, res) => {
     });
   }
 
-  const find = await CartModal.find({product_id,product_qty,product_color,user_id:req.user?._id});
+  const find = await CartModal.find({product_id,product_color,user_id:req.user?._id});
 
   if (find.length > 0) {
     return res.status(200).json({

@@ -20,3 +20,15 @@ export const ReviewValidation = vine.object({
     descrition:vine.string().minLength(40),
     rating:vine.number()
 })
+
+export const AddressValidate = vine.object({
+    fullname: vine.string().minLength(2).maxLength(30),
+    phoneNo1: vine.string(),
+    pincode: vine.string(),
+    country: vine.string(),
+    state: vine.string(),
+    city: vine.string(),
+    houseNo: vine.string(),
+    area: vine.string(),
+    type: vine.string(),
+});
