@@ -151,6 +151,128 @@ const UpadteAvatar = asyncHandler(async (req, res) => {
   });
 });
 
+const UserGetOrder = asyncHandler(async(req,res)=>{
+  const {_id} = req.user
+  const data = await User.aggregate([
+    {
+      $match: {
+        _id: _id
+      }
+    },
+    {
+      $lookup: {
+        from: "orders",
+        localField: "_id",
+        foreignField: "user_id",
+        as: "UserOrders",
+        pipeline: [
+          {
+            $lookup: {
+              from: "products",
+              localField: "product.productId",
+              foreignField: "_id",
+              as: "productDetails",
+                pipeline:[
+                  {
+                    $project:{
+                      name:1,
+                      selling_price:1,
+                      product_type:1,
+                      product_brand:1,
+                      product_skuId:1,
+                      product_image:1
+                    }
+                  }
+                ]
+            }
+          },
+          
+        ]
+      }
+    },
+    {
+      $addFields:{
+        OrderedProduct:"$UserOrders"
+      }
+    },
+    {
+      $project:{
+        username:1,
+        OrderedProduct:1
+
+      }
+    }
+  ]);
+  
+  return res.status(200).json({
+    data:data[0]
+  })
+})
+
+const GetOrderSeller = asyncHandler(async(req,res)=>{
+  const {_id} = req.user
+  const data = await User.aggregate([
+    {
+      $match: { _id:_id }
+    },
+    {
+      $lookup:{
+        from:"orders",
+        localField:"_id",
+        foreignField:"product.sellerId",
+        as:"OrderProduct",
+        pipeline:[
+          {
+            $lookup:{
+              from:"products",
+              localField:"product.productId",
+              foreignField:"_id",
+              as:"Product",
+              pipeline:[
+                {
+                  $project:{
+                    name:1,
+                    selling_price:1,
+                    product_brand:1,
+                    product_image:1
+                  }
+                }
+              ]
+            }
+          },
+          {
+            $lookup:{
+              from:"addresses",
+              localField:"address_id",
+              foreignField:"_id",
+              as:"DeliveryAddress"
+            }
+          }
+          
+          
+        ]
+      }
+    },
+    {
+      $addFields:{
+        OrderedProduct:"$OrderProduct"
+      }
+    },
+    {
+      $project:{
+        username:1,
+        OrderedProduct:1
+      }
+    }
+  ]);
+
+  return res.status(200).json({
+    data
+  })
+
+
+})
+
 // /payement gateway
 
 const Payement = asyncHandler(async (req, res) => {
@@ -175,7 +297,7 @@ const Payement = asyncHandler(async (req, res) => {
         payment_method_types: ["card"],
         mode: "payment",
         success_url: "http://localhost:5173/success",
-        cancel_url: "http://localhost:5173/cancel",
+        cancel_url: "http://localhost:5173/cancel"
       });
 
       
@@ -194,4 +316,6 @@ export {
   UpdateUser,
   UpadteAvatar,
   Payement,
+  UserGetOrder,
+  GetOrderSeller
 };

@@ -24,3 +24,11 @@ export const ProductSchema = vine.object({
     product_brand:vine.string(),
     
 })
+
+
+
+export const OrderSchema =  vine.object({
+    address_id:vine.string(),
+    payement_method:vine.string(),
+    
+})
