@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "nodemon -r dotenv/config src/index.js",
     "start": "node src/index.js",
+    "build":"npm i",
     "gen": "node swagger.js"
   },
   "keywords": [],

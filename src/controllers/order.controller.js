@@ -20,8 +20,17 @@ const CreateOrder = asyncHandler(async(req,res)=>{
     })
 })
 
+const GetOrder = asyncHandler(async(req,res)=>{
+    const data = await Ordermodel.find({}).populate("address_id")
+
+    return res.status(200).json({
+        data
+    })
+})
+
 
 
 export {
     CreateOrder,
+    GetOrder
 }
