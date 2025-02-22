@@ -2,7 +2,7 @@ import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 import swaggerUi from "swagger-ui-express"
-import swaggerDocument from "../swagger.json" assert { type: 'json' };
+// import swaggerDocument from "../swagger.json" ;
 
 
 const app = express()
@@ -24,6 +24,6 @@ import AllRoutes from "./routes/index.routes.js"
 app.use("/api/v1",AllRoutes)
 
 // implement swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 export {app}
